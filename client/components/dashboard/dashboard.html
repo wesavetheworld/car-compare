@@ -1,14 +1,17 @@
 <div ng-cloak>
   <div layout="row">
     <button ng-click="vm.clearMap()">Clear</button>
-    <button ng-click="vm.getMarkers()">Get Markers</button>
+    <button ng-click="vm.getPxs()">Get Prices</button>
+    <br><br>
     <div>
       From {{ vm.markers[0].marker.position.address }} <br>
       To {{ vm.markers[1].marker.position.address }}
     </div>
+
     <div>
-      <button ng-click="vm.getPx('uber')">Get Uber Price: </button> <span>{{ vm.prices.uber }}</span><br>
-      <button ng-click="vm.getPx('lyft')">Get Lyft Price: </button> <span>{{ vm.prices.lyft | currency }}</span>
+      <h3>Prices</h3>
+      <div>UberPOOL: {{ vm.prices.uber }}</div>
+      <div>Lyft Line: {{ vm.prices.lyft | currency }}</div>
     </div>
     <div id="map"></div>
   </div>

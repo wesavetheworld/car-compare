@@ -3,28 +3,25 @@
     .module('mainApp')
     .controller('DashCtrl',DashCtrl);
 
-    DashCtrl.$inject = ['DashFactory','CarFactory']
-    function DashCtrl(DashFactory,CarFactory) {
+    DashCtrl.$inject = ['$scope','DashFactory','CarFactory']
+    function DashCtrl($scope, DashFactory,CarFactory) {
 
       var vm = this;
       vm.clearMap = clearMap;
       vm.getMarkers = getMarkers;
-      vm.getPx = getPx;
+      vm.getPxs = getPxs;
       vm.markers = [];
       vm.prices = {
         uber: null,
         lyft: null
       }
 
-      function activate() {
-        vm.map = DashFactory.newMap()
-      }
-      activate()
+      vm.map = DashFactory.newMap()
 
       function clearMap() {
         DashFactory.clearMap()
         vm.markers = []
-        vm. prices = {}
+        vm.prices = {}
       }
 
       function getMarkers() {
@@ -32,15 +29,17 @@
         console.log(vm.markers)
       }
 
-      function getPx(type) {
+      function getPxs() {
         console.log("getting in ctrl")
-        if (type === 'uber') {
-          CarFactory.getUber()
-          .then(px => vm.prices[type] = px)
-        } else if (type === 'lyft') {
-          CarFactory.getLyft()
-          .then(px => vm.prices[type] = px)
-        }
+        vm.markers = DashFactory.getMarkers()
+        Promise.all([CarFactory.getUber(),CarFactory.getLyft()])
+        .then(pxs => {
+          console.log(pxs)
+          vm.prices.uber = pxs[0]
+          vm.prices.lyft = pxs[1]
+          $scope.$digest()
+        })
+
       }
 
     }

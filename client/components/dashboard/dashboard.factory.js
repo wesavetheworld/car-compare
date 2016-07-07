@@ -7,6 +7,9 @@
     function DashFactory($http) {
       var flightPath;
       var markers = [];
+      var directionsDisplay;
+      var directionsService = new google.maps.DirectionsService();
+      var geocoder = new google.maps.Geocoder();
 
       var mapFactory = {
         newMap,
@@ -25,9 +28,8 @@
         };
         var map = new google.maps.Map(document.getElementById('map'), mapOptions)
         map.addListener('click', (e) => {
-          console.log(e.latLng.lat(),e.latLng.lng())
           if (markers.length < 2)
-            addMarkers(map,{lat: e.latLng.lat(), lng: e.latLng.lng()})
+            addMarkers(map, {lat: e.latLng.lat(), lng: e.latLng.lng()})
         })
         return map;
       }
@@ -39,12 +41,11 @@
         var position = new google.maps.LatLng(point.lat, point.lng);
         locations.push(position)
         console.log(position)
-        var geocoder = new google.maps.Geocoder();
+
         geocoder.geocode({location: position},cb)
 
         function cb(e,status) {
           if (status === google.maps.GeocoderStatus.OK) {
-            console.log(e)
             e.forEach(geo => {
               if (geo.types.indexOf('street_address') > -1) {
                 position.address = geo.formatted_address;
@@ -52,7 +53,6 @@
             })
           }
           else console.log('no matches')
-
         }
 
         var marker = new google.maps.Marker({
@@ -63,7 +63,11 @@
 
           markers.push({ marker });
 
-          bounds.extend(position);
+          if (markers.length === 2) {
+            renderPath(map)
+          }
+
+          // bounds.extend(position);
 
 
           // map.fitBounds(bounds);
@@ -79,11 +83,29 @@
 
       }
 
+      function renderPath(map) {
+        directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+        directionsDisplay.setMap(map);
+
+        var request = {
+            origin: markers[0].marker.position,
+            destination: markers[1].marker.position,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+          }
+        });
+
+      }
+
       function getMarkers() {
         return markers;
       }
 
       function clearMap() {
+        directionsDisplay.setMap(null)
         markers.forEach(el => el.marker.setMap(null));
         // if (flightPath) flightPath.setMap(null);
         markers = [];
