@@ -1,11 +1,12 @@
 {
-  "name": "Car-Compare",
+  "name": "CheapestRide",
   "version": "1.0.0",
   "description": "",
   "main": "server/start.js",
   "scripts": {
     "start": "nodemon --watch server -e js,html server/start.js",
-    "postinstall": "gulp build"
+    "postinstall": "gulp build",
+    "run": "node server/start.js"
   },
   "engines": {
     "node": ">=4.0.0"
