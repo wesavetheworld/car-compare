@@ -3,7 +3,7 @@
 =============================================*/
 body {
    color: black;
-   padding: 20px;
+  //  padding: 20px;
    font-family: Roboto,"Helvetica Neue",sans-serif;
 }
 
@@ -14,14 +14,25 @@ body {
   background-color: white;
 }
 
+.buttons {
+  text-align: center;
+  margin: 10px;
+}
+
 .heading {
   text-align: center;
 }
 
+.best {
+  color: green;
+  font-size: 18px;
+}
+
 #map {
   display: block;
-  margin-top: 50px;
-  margin: 20px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+
   height: 60vh;
   width: 90%;
  }

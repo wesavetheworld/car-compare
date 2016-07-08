@@ -9,10 +9,7 @@
         url: '/',
           templateUrl: '/components/dashboard/dashboard.html',
           controller: 'DashCtrl',
-          controllerAs: 'vm',
-          resolve: {
-
-          }
+          controllerAs: 'vm'
       })
     }
 

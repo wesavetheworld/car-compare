@@ -1,18 +1,29 @@
-<div ng-cloak>
-  <div layout="row">
-    <button ng-click="vm.clearMap()">Clear</button>
-    <button ng-click="vm.getPxs()">Get Prices</button>
-    <br><br>
+<div class="container" ng-cloak>
+
+  <div class="col">
+
+    <h3>Addresses</h3>
     <div>
       From {{ vm.markers[0].marker.position.address }} <br>
       To {{ vm.markers[1].marker.position.address }}
     </div>
 
+  </div>
+
+<div class="col">
     <div>
       <h3>Prices</h3>
-      <div>UberPOOL: {{ vm.prices.uber }}</div>
-      <div>Lyft Line: {{ vm.prices.lyft | currency }}</div>
+      <div ng-class='{best: vm.prices.uber < vm.prices.lyft}'>UberPOOL: {{ vm.prices.uber | currency }}</div>
+      <div ng-class='{best: vm.prices.uber > vm.prices.lyft}'>Lyft Line: {{ vm.prices.lyft | currency }}</div>
     </div>
+</div>
+
+<div class="buttons">
+  <button ng-click="vm.clearMap()">Clear</button>
+  <button ng-click="vm.getPxs()">Get Prices</button>
+</div>
+
     <div id="map"></div>
-  </div>
+
+
 </div>

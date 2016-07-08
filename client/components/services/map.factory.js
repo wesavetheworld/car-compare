@@ -1,10 +1,10 @@
 (function() {
   angular
     .module('mainApp')
-    .factory('DashFactory',DashFactory);
+    .factory('MapFactory',MapFactory);
 
-    DashFactory.$inject = ['$http']
-    function DashFactory($http) {
+    MapFactory.$inject = ['$http']
+    function MapFactory($http) {
       var flightPath;
       var markers = [];
       var directionsDisplay;
@@ -28,8 +28,9 @@
         };
         var map = new google.maps.Map(document.getElementById('map'), mapOptions)
         map.addListener('click', (e) => {
-          if (markers.length < 2)
+          if (markers.length < 2) {
             addMarkers(map, {lat: e.latLng.lat(), lng: e.latLng.lng()})
+          } else clearMap()
         })
         return map;
       }
@@ -84,7 +85,7 @@
       }
 
       function renderPath(map) {
-        directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+        directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true, preserveViewport: true});
         directionsDisplay.setMap(map);
 
         var request = {

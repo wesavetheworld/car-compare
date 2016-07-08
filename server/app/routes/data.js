@@ -1,6 +1,7 @@
 var router = require('express').Router();
 module.exports = router;
 var rp = require('request-promise')
+var env = require('../../env')
 
 router.get('/price/uber', (req, res, next) => {
   var q = req.query;
@@ -13,7 +14,7 @@ router.get('/price/uber', (req, res, next) => {
       end_longitude: q.elng,
     },
     headers: {
-      Authorization: "Token WdpsIArN6kinJ-Y_-jv-0nrS_9GyeFPsBBErQpWY"
+      Authorization: env.UBER_AUTH
     },
     json: true
   }
@@ -37,7 +38,7 @@ router.get('/price/lyft', (req, res, next) => {
       end_lng: q.elng,
     },
     headers: {
-      Authorization: "Bearer  gAAAAABXfo7N9Lj0uOXcdfNX-E7HOGT0_UDr3COsGxdKqSjuGAU9WIyXrzZtkOBfz90-9dqE6-i-tF8t_UA31NDAEKVzk9IewqkifttGg8eQDSxD7SSIndn7wd5isNjLlH7wO6Kn-0xYFximACEL_EXjlfVxGoMj9e_P6l1LUz6bJ-xWqEcfFx5IV0bCqKCAqkXOQ0Bf1dHEmEusZcv_Zi130PsUxDG5Qg=="
+      Authorization: env.LYFT_AUTH
     },
     json: true
   }
