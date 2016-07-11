@@ -42,7 +42,6 @@
         var position = new google.maps.LatLng(point.lat, point.lng);
         locations.push(position)
         console.log(position)
-
         geocoder.geocode({location: position},cb)
 
         function cb(e,status) {
@@ -69,18 +68,7 @@
           }
 
           // bounds.extend(position);
-
-
           // map.fitBounds(bounds);
-
-          // flightPath = new google.maps.Polyline({
-          //   path: locations,
-          //   geodesic: true,
-          //   strokeColor: '#FF0000',
-          //   strokeOpacity: 1.0,
-          //   strokeWeight: 2
-          // });
-          // flightPath.setMap(map);
 
       }
 
@@ -108,7 +96,6 @@
       function clearMap() {
         directionsDisplay.setMap(null)
         markers.forEach(el => el.marker.setMap(null));
-        // if (flightPath) flightPath.setMap(null);
         markers = [];
       }
 

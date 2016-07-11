@@ -8,15 +8,17 @@
 
       var vm = this;
       vm.clearMap = clearMap;
-      vm.getMarkers = getMarkers;
       vm.getPxs = getPxs;
       vm.markers = [];
       vm.prices = {
         uber: null,
         lyft: null
       }
+      vm.start = '';
+      vm.end = '';
 
       vm.map = MapFactory.newMap()
+      vm.map.addListener('click', (e) => getMarkers())
 
       function clearMap() {
         MapFactory.clearMap()
@@ -26,11 +28,13 @@
 
       function getMarkers() {
         vm.markers = MapFactory.getMarkers()
+        console.log(vm.markers)
       }
 
       function getPxs() {
         vm.prices = {}
         getMarkers()
+        if (vm.markers.length !==2) return;
         Promise.all([CarFactory.getUber(),CarFactory.getLyft()])
         .then(pxs => {
           vm.prices.uber = pxs[0]

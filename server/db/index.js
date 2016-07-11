@@ -7,7 +7,7 @@ var DATABASE_URI = require(path.join(__dirname, '../env')).DATABASE_URI;
 var mongoose = require('mongoose');
 var db = mongoose.connect(DATABASE_URI).connection;
 
-// require('./Events.js');
+require('./db');
 
 var startDbPromise = new Promise(function (resolve, reject) {
     db.on('open', resolve);
