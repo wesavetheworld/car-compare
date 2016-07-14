@@ -2,10 +2,11 @@
 var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
-    token: {
-      type: Object,
-      required: true
-    }
+    access_token: String,
+    expires_at: Date,
+    expires_in: Number,
+    token_type: String,
+    scope: String
 });
 
 

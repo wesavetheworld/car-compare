@@ -1,6 +1,7 @@
 var router = require('express').Router();
 module.exports = router;
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 var Auth = mongoose.model('Auth');
 var rp = require('request-promise')
 var env = require('../../env')
@@ -42,45 +43,49 @@ router.get('/price/uber', (req, res, next) => {
 router.get('/price/lyft', (req, res, next) => {
 
   var q = req.query;
-  if (!token || token.expired()) {
+
+  var options = {
+    uri: `https://api.lyft.com/v1/cost`,
+    qs: {
+      start_lat: q.lat,
+      start_lng: q.lng,
+      end_lat: q.elat,
+      end_lng: q.elng,
+    },
+    headers: {
+      authorization: token.token.token_type + ' ' + token.token.access_token
+    },
+    json: true
+  }
+  console.log("getting price w/ token",token.token)
+
+  rp(options)
+  .then(px => {
+    console.log(px.data)
+    res.json(px)
+  })
+  .catch(err => console.log(err))
+})
+
+router.get('/auth', (req, res, next) => {
+  Auth.find({})
+  .then(result => {
+    if (result.length) {
+    token = oauth2.accessToken.create(result[0])
+    if (!token.expired())
+      res.send("found "+token.token)
+  }
+  if (!result.length || token.expired()) {
     oauth2.client
     .getToken(tokenConfig)
     .then(function saveToken(result) {
       token = oauth2.accessToken.create(result);
       console.log("created",token.token.access_token)
-      getLyftPx(token);
+      res.send("created "+token.token)
+      var newToken = new Auth(result)
+      newToken.save(err => console.log(err))
     })
     .catch(err => console.log('Access Token error', err.message))
-  } else getLyftPx(token)
-
-  function getLyftPx(token) {
-    var options = {
-      uri: `https://api.lyft.com/v1/cost`,
-      qs: {
-        start_lat: q.lat,
-        start_lng: q.lng,
-        end_lat: q.elat,
-        end_lng: q.elng,
-      },
-      headers: {
-        authorization: token.token.token_type + ' ' + token.token.access_token
-      },
-      json: true
-    }
-    console.log("getting price w/ token",token.token.access_token)
-
-    return rp(options)
-    .then(px => {
-      console.log(px)
-      res.json(px)
-    })
-    .catch(err => console.log(err))
   }
-
 })
-
-
-router.get('/db', (req, res, next) => {
-  Auth.find({})
-  .then(result => console.log(JSON.parse(result).token))
 })
