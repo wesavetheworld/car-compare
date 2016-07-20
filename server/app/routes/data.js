@@ -53,7 +53,7 @@ router.get('/price/lyft', (req, res, next) => {
       end_lng: q.elng,
     },
     headers: {
-      authorization: token.token.token_type + ' ' + token.token.access_token
+      authorization: token.token_type + ' ' + token.access_token
     },
     json: true
   }
@@ -61,29 +61,33 @@ router.get('/price/lyft', (req, res, next) => {
 
   rp(options)
   .then(px => {
-    console.log(px.data)
+    console.log(px)
     res.json(px)
   })
   .catch(err => console.log(err))
 })
 
 router.get('/auth', (req, res, next) => {
+  var now = new Date();
   Auth.find({})
   .then(result => {
-    if (result.length) {
-    token = oauth2.accessToken.create(result[0])
-    if (!token.expired())
-      res.send("found "+token.token)
-  }
-  if (!result.length || token.expired()) {
-    oauth2.client
-    .getToken(tokenConfig)
-    .then(function saveToken(result) {
-      token = oauth2.accessToken.create(result);
-      console.log("created",token.token.access_token)
-      res.send("created "+token.token)
-      var newToken = new Auth(result)
-      newToken.save(err => console.log(err))
+    if (result.length && result[0].expires_at > now) {
+      console.log(result[0].expires_at)
+    token = result[0]
+    res.send("found "+token)
+  } else {
+    Auth.remove({})
+    .then(() => {
+      oauth2.client
+      .getToken(tokenConfig)
+      .then((result) => {
+        result.expires_at = new Date(Date.now() + result.expires_in*1000);
+        token = result;
+        var newToken = new Auth(token)
+        newToken.save(err => console.log(err))
+        console.log("created",token)
+        res.send("created "+token)
+      })
     })
     .catch(err => console.log('Access Token error', err.message))
   }
