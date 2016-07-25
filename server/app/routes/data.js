@@ -72,9 +72,9 @@ router.get('/auth', (req, res, next) => {
   Auth.find({})
   .then(result => {
     if (result.length && result[0].expires_at > now) {
-      console.log(result[0].expires_at)
-    token = result[0]
-    res.send("found "+token)
+      token = result[0]
+      console.log('found '+token)
+      res.send("found "+token)
   } else {
     Auth.remove({})
     .then(() => {
