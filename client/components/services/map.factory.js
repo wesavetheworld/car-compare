@@ -41,18 +41,19 @@
 
         var position = new google.maps.LatLng(point.lat, point.lng);
         locations.push(position)
-        console.log(position)
+        console.log("marker psn",position)
+
         geocoder.geocode({location: position},cb)
 
         function cb(e,status) {
           if (status === google.maps.GeocoderStatus.OK) {
             e.forEach(geo => {
-              if (geo.types.indexOf('street_address') > -1) {
+              if (geo.types.indexOf('street_address') > -1 ||
+                  geo.types.indexOf('premise') > -1) {
                 position.address = geo.formatted_address;
               }
             })
-          }
-          else console.log('no matches')
+          } else console.log('no matches')
         }
 
         var marker = new google.maps.Marker({
@@ -62,6 +63,8 @@
         });
 
           markers.push({ marker });
+
+
 
           if (markers.length === 2) {
             renderPath(map)

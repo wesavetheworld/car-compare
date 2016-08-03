@@ -30,7 +30,6 @@
 
       function getMarkers() {
         vm.markers = MapFactory.getMarkers()
-        console.log(vm.markers)
       }
 
       function getPxs() {
@@ -39,9 +38,9 @@
         if (vm.markers.length !==2) return;
         Promise.all([CarFactory.getUber(),CarFactory.getLyft()])
         .then(pxs => {
-          vm.prices.uber = pxs[0]
+          vm.prices.uber = +pxs[0]
           vm.prices.lyft = pxs[1]
-          $scope.$digest()
+          $scope.$apply()
         })
       }
     }

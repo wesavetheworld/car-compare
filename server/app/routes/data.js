@@ -57,7 +57,7 @@ router.get('/price/lyft', (req, res, next) => {
     },
     json: true
   }
-  console.log("getting price w/ token",token.token)
+  console.log("getting price w/ token",token)
 
   rp(options)
   .then(px => {
