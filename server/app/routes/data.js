@@ -75,21 +75,22 @@ router.get('/auth', (req, res, next) => {
       token = result[0]
       console.log('found '+token)
       res.send("found "+token)
-  } else {
-    Auth.remove({})
-    .then(() => {
-      oauth2.client
-      .getToken(tokenConfig)
-      .then((result) => {
-        result.expires_at = new Date(Date.now() + result.expires_in*1000);
-        token = result;
-        var newToken = new Auth(token)
-        newToken.save(err => console.log(err))
-        console.log("created",token)
-        res.send("created "+token)
+    } else {
+      Auth.remove({})
+      .then(() => {
+        console.log("creating")
+        oauth2.client
+        .getToken(tokenConfig)
+        .then((result) => {
+          result.expires_at = new Date(Date.now() + result.expires_in*1000);
+          token = result;
+          var newToken = new Auth(token)
+          newToken.save(err => console.log(err))
+          console.log("created",token)
+          res.send("created "+token)
+        })
       })
-    })
     .catch(err => console.log('Access Token error', err.message))
-  }
-})
+    }
+  })
 })
