@@ -63,16 +63,9 @@
         });
 
           markers.push({ marker });
-
-
-
           if (markers.length === 2) {
             renderPath(map)
           }
-
-          // bounds.extend(position);
-          // map.fitBounds(bounds);
-
       }
 
       function renderPath(map) {
@@ -89,7 +82,6 @@
             directionsDisplay.setDirections(response);
           }
         });
-
       }
 
       function getMarkers() {
@@ -101,7 +93,5 @@
         markers.forEach(el => el.marker.setMap(null));
         markers = [];
       }
-
-
     }
 })();

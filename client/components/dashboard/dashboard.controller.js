@@ -17,10 +17,14 @@
       vm.start = '';
       vm.end = '';
 
-      CarFactory.getAuth()
+      ///////////////
 
       vm.map = MapFactory.newMap()
       vm.map.addListener('click', (e) => getMarkers())
+
+      CarFactory.getAuth()
+
+      //////////////
 
       function clearMap() {
         MapFactory.clearMap()

@@ -86,7 +86,7 @@ router.get('/auth', (req, res, next) => {
           token = result;
           var newToken = new Auth(token)
           newToken.save(err => console.log(err))
-          console.log("created",token)
+          console.log("created",token.token)
           res.send("created "+token)
         })
       })
